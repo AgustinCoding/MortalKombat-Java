@@ -1,5 +1,6 @@
 import os
 
+# Este script fue utilizado para deshacerme de archivos .WEBP repetidos luego de convertirlos a PNG de forma eficiente y segura
 
 folder = "C:\\Users\\55533250\\IdeaProjects\\MortalKombatProject\\src\\main\\resources\\images"
 
