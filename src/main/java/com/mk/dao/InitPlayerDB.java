@@ -12,21 +12,19 @@ import java.sql.SQLException;
 
 public class InitPlayerDB {
 
-    public static void init(){
-        try(Connection conn = DBConnection.getConnection()){
-            String createTableSQL = """
-                    CREATE TABLE IF NOT EXISTS players(
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        name TEXT NOT NULL,
-                        password_hash VARCHAR(255) NOT NULL
-                    )
-                    """;
-            Statement statement = conn.createStatement();
-            statement.execute(createTableSQL);
+    public static void init(Connection conn) throws SQLException {
 
-        }catch(SQLException e ){
-            e.printStackTrace();
-        }
+        String createTableSQL = """
+                CREATE TABLE IF NOT EXISTS players(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT NOT NULL UNIQUE,
+                    password_hash VARCHAR(255) NOT NULL
+                )
+                """;
+        Statement statement = conn.createStatement();
+        statement.execute(createTableSQL);
+
+
     }
 
 

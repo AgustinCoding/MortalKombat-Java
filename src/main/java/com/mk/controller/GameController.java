@@ -1,9 +1,12 @@
 package com.mk.controller;
 
+import com.mk.dao.FighterDAO;
+import com.mk.dao.InitDB;
 import com.mk.model.*;
 import com.mk.controller.FighterSelectionController;
 import com.mk.view.FighterSelectionView;
 import com.mk.view.LoginView;
+import com.mk.utils.PasswordHasher;
 
 
 
@@ -17,11 +20,9 @@ public class GameController {
 
     public static void main(String[] args) {
 
-        Game game = new Game();
-        Fighter[] fighters = game.getFighters();
+        InitDB.initAll();
 
-        new LoginView();
-        new FighterSelectionController(fighters);
+        System.out.println(PasswordHasher.hash("xxbetagu123"));
 
     }
 

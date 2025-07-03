@@ -30,45 +30,43 @@
         };
 
 
-        public static void init(){
-            try(Connection conn = DBConnection.getConnection()){
-                // CREAR LA TABLA
-                String createTableSQL = """
-                        CREATE TABLE IF NOT EXISTS fighters(
-                            id INTEGER PRIMARY KEY AUTOINCREMENT,
-                            name TEXT NOT NULL,
-                            power INTEGER,
-                            gender TEXT,
-                            imagepath TEXT,
-                            description TEXT)
-                        """;
-                Statement stmt = conn.createStatement();
-                stmt.execute(createTableSQL);
+        public static void init(Connection conn) throws SQLException {
 
-                // INSERTAR PERSONAJES
-                String insertSQL = "INSERT INTO fighters (name, power, gender, imagepath, description) VALUES (?, ?, ?, ?, ?)";
-                PreparedStatement pstmt = conn.prepareStatement(insertSQL);
+            // CREAR LA TABLA
+            String createTableSQL = """
+                    CREATE TABLE IF NOT EXISTS fighters(
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL,
+                        power INTEGER,
+                        gender TEXT,
+                        imagepath TEXT,
+                        description TEXT)
+                    """;
+            Statement stmt = conn.createStatement();
+            stmt.execute(createTableSQL);
 
-                // VERIFICAR SI PERSONAJES NO EXISTEN
-                String countQuery = "SELECT COUNT(*) FROM fighters";
-                ResultSet rs = stmt.executeQuery(countQuery);
-                if (rs.next() && rs.getInt(1) == 0) {
-                    // SOLO INSERTAR SI LA TABLA ESTA VACIA
-                    for(String[] character : stringCharacters){
-                        pstmt.setString(1, character[0]);
-                        pstmt.setInt(2, Integer.parseInt(character[1]));
-                        pstmt.setString(3, character[2]);
-                        pstmt.setString(4, character[3]);
-                        pstmt.setString(5, character[4]);
-                        pstmt.executeUpdate();
-                    }
+            // INSERTAR PERSONAJES
+            String insertSQL = "INSERT INTO fighters (name, power, gender, imagepath, description) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement pstmt = conn.prepareStatement(insertSQL);
+
+            // VERIFICAR SI PERSONAJES NO EXISTEN
+            String countQuery = "SELECT COUNT(*) FROM fighters";
+            ResultSet rs = stmt.executeQuery(countQuery);
+            if (rs.next() && rs.getInt(1) == 0) {
+                // SOLO INSERTAR SI LA TABLA ESTA VACIA
+                for(String[] character : stringCharacters){
+                    pstmt.setString(1, character[0]);
+                    pstmt.setInt(2, Integer.parseInt(character[1]));
+                    pstmt.setString(3, character[2]);
+                    pstmt.setString(4, character[3]);
+                    pstmt.setString(5, character[4]);
+                    pstmt.executeUpdate();
                 }
-
-
-
-            }catch(SQLException e){
-                e.printStackTrace();
             }
+
+
+
+
 
     }
     }

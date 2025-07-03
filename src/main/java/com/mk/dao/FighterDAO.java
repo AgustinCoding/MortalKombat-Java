@@ -65,7 +65,7 @@ public class FighterDAO {
                                 rs.getString("name"),
                                 rs.getInt("power"),
                                 rs.getString("gender"),
-                                rs.getString("image"),
+                                rs.getString("imagepath"),
                                 rs.getString("description"),
                                 rs.getInt("id")
                         ));
@@ -94,7 +94,7 @@ public class FighterDAO {
                         rs.getString("name"),
                         rs.getInt("power"),
                         rs.getString("gender"),
-                        rs.getString("image"),
+                        rs.getString("imagepath"),
                         rs.getString("description"),
                         rs.getInt("id")
                 );
@@ -122,7 +122,7 @@ public class FighterDAO {
                         rs.getString("name"),
                         rs.getInt("power"),
                         rs.getString("gender"),
-                        rs.getString("image"),
+                        rs.getString("imagepath"),
                         rs.getString("description"),
                         rs.getInt("id")
                 );
