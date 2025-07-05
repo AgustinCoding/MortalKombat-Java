@@ -1,12 +1,8 @@
 package com.mk.controller;
 
-import com.mk.dao.FighterDAO;
 import com.mk.dao.InitDB;
-import com.mk.model.*;
-import com.mk.controller.FighterSelectionController;
-import com.mk.view.FighterSelectionView;
-import com.mk.view.LoginView;
 import com.mk.utils.PasswordHasher;
+import com.mk.view.*;
 
 
 
@@ -22,7 +18,7 @@ public class GameController {
 
         InitDB.initAll();
 
-        System.out.println(PasswordHasher.hash("xxbetagu123"));
+        new AuthView();
 
     }
 
