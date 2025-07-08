@@ -18,7 +18,7 @@ public class GameController {
 
         InitDB.initAll();
 
-        new AuthView();
+        AuthViewController authViewController = new AuthViewController();
 
     }
 

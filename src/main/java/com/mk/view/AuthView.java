@@ -67,8 +67,7 @@ public class AuthView extends JFrame {
 
         // Panel para mostrar errores
         errorLabel = new JLabel(" ");
-        errorLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        errorLabel.setForeground(Color.RED);
+        errorLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
         errorLabel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
@@ -117,8 +116,15 @@ public class AuthView extends JFrame {
         return errorLabel;
     }
 
-    // Metodo para mostrar errores
+    // Metodo para mostrar errores en rojo
     public void showError(String message) {
+        errorLabel.setForeground(Color.RED);
+        errorLabel.setText(message);
+    }
+
+    // Metodo para mostrar mensajes en verde
+    public void showMessage(String message){
+        errorLabel.setForeground(Color.GREEN);
         errorLabel.setText(message);
     }
 
@@ -127,7 +133,10 @@ public class AuthView extends JFrame {
         errorLabel.setText(" ");
     }
 
-    public static void main(String[] args) {
-        new AuthView();
+    // Metodo para limpiar texto en campos de input
+    public void clearFields(){
+        usernameField.setText("");
+        passwordField.setText("");
     }
+
 }
