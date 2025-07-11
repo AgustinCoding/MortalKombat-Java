@@ -8,6 +8,7 @@ public class InitDB {
 
     public static void initAll(){
         try(Connection conn = DBConnection.getConnection()){
+            assert(conn != null);
             InitPlayerDB.init(conn);
             InitFightersDB.init(conn);
 

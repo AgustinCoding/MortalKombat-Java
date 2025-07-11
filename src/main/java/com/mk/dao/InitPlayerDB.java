@@ -18,7 +18,8 @@ public class InitPlayerDB {
                 CREATE TABLE IF NOT EXISTS players(
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     username TEXT NOT NULL UNIQUE,
-                    password_hash VARCHAR(255) NOT NULL
+                    password_hash VARCHAR(255) NOT NULL,
+                    exp INTEGER
                 )
                 """;
         Statement statement = conn.createStatement();

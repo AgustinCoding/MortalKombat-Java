@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.mk.dao.*;
+import com.mk.model.Player;
 import com.mk.utils.PasswordHasher;
 
 public class PlayerDAO {
@@ -50,8 +51,26 @@ public class PlayerDAO {
         return false;
     }
 
-    public static void loadPlayer(String username){
+    public static Player getPlayerInstance(String username){
+        // Creates a Player object with bd attributes
+        try(Connection conn = DBConnection.getConnection()){
+            String sql = "SELECT username, exp FROM players WHERE username = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
 
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()){
+                return new Player(rs.getString("username"), rs.getInt("exp"));
+            }else{
+                System.out.println("Jugador " + '"' +  username + '"' + " no existe en la base de datos");
+            }
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public static boolean userExists(String username){

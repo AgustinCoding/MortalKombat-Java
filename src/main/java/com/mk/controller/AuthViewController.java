@@ -1,6 +1,7 @@
 package com.mk.controller;
 
 import com.mk.dao.PlayerDAO;
+import com.mk.model.Player;
 import com.mk.view.AuthView;
 
 import javax.swing.*;
@@ -12,7 +13,9 @@ public class AuthViewController {
     private static AuthView view;
     private static String USERNAME;
     private static String PASSWORD;
-    private static boolean IS_USER_LOGGED = false;
+    private static volatile boolean IS_USER_LOGGED = false;
+
+    private Player loggedPlayerInstance;
 
     public AuthViewController(){
         view = new AuthView();
@@ -32,12 +35,19 @@ public class AuthViewController {
                 return;
             }
 
-            // If credentials are correct login else show error
+            // If credentials are correct login and close window else show error
             if(PlayerDAO.isPasswordCorrect(USERNAME, PASSWORD)){
-                view.showMessage("Inicio de sesion exitoso");
+                view.showMessage("Inicio de sesion exitoso. Espere..");
                 IS_USER_LOGGED = true;
                 view.clearFields();
-                // loadPlayer()
+                loggedPlayerInstance = PlayerDAO.getPlayerInstance(USERNAME);
+                new Timer(3000, event -> {
+                    ((Timer) event.getSource()).stop();
+
+                    closeWindow();
+                }).start();
+
+
                 return;
             }else{
                 view.showError("Credenciales incorrectas");
@@ -101,7 +111,14 @@ public class AuthViewController {
     public boolean isIsUserLogged() {return IS_USER_LOGGED;}
 
 
+    public Player getLoggedPlayerInstance(){
+        return this.loggedPlayerInstance;
+    }
 
+
+    public void closeWindow(){
+        view.dispose();
+    }
 
 
 }

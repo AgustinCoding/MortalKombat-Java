@@ -116,6 +116,7 @@ public class AuthView extends JFrame {
         return errorLabel;
     }
 
+
     // Metodo para mostrar errores en rojo
     public void showError(String message) {
         errorLabel.setForeground(Color.RED);

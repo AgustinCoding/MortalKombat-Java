@@ -134,4 +134,7 @@ public class FighterSelectionView extends JFrame {
     public Fighter getCurrentFighter() {
         return fighters[currentIndex];
     }
+
+
+
 }

@@ -72,4 +72,5 @@ public class Fighter {
     public void setNewDialog(String dialog){
         this.dialogs.add(dialog);
     }
+
 }

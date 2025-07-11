@@ -1,13 +1,22 @@
 package com.mk.controller;
 
+import com.mk.dao.FighterDAO;
+import com.mk.model.Player;
 import com.mk.view.FighterSelectionView;
 import com.mk.model.Fighter;
 
-public class FighterSelectionController {
-    private FighterSelectionView view;
+import javax.swing.*;
 
-    public FighterSelectionController(Fighter[] fighters){
+public class FighterSelectionController{
+    private final FighterSelectionView view;
+    private final Fighter[] fighters = FighterDAO.getAllObjects().toArray(new Fighter[0]);
+    private Player plr;
+
+
+
+    public FighterSelectionController(Player player){
         this.view = new FighterSelectionView(fighters);
+        this.plr = player;
         initListeners();
     }
 
@@ -22,10 +31,20 @@ public class FighterSelectionController {
         });
 
         view.getConfirmButton().addActionListener(e ->{
-            // to be implemented
+            plr.setSelectedFighter(view.getCurrentFighter());
+            JOptionPane.showMessageDialog(null, "¡Personaje seleccionado!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            new Timer(1000, evt ->{
+                ((Timer) evt.getSource()).stop();
+
+                closeWindow();
+            }).start();
+
         });
     }
 
 
+    private void closeWindow(){
+        view.dispose();
+    }
 
 }
