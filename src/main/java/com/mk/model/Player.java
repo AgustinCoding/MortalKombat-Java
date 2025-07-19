@@ -3,7 +3,7 @@ package com.mk.model;
 public class Player {
     private String username;
     private Fighter selectedFighter = null;
-    private int exp;
+    private int exp = 1;
 
 
     public Player(String username, int exp){

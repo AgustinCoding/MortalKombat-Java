@@ -140,4 +140,9 @@ public class AuthView extends JFrame {
         passwordField.setText("");
     }
 
+    public void showSuccessLoginDialog(){
+        JOptionPane.showMessageDialog(null,
+                "Has iniciado sesion");
+    }
+
 }

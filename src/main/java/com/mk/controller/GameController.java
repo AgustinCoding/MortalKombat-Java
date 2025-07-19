@@ -1,6 +1,8 @@
 package com.mk.controller;
 
+import com.mk.dao.FighterDAO;
 import com.mk.dao.InitDB;
+import com.mk.model.Fighter;
 import com.mk.model.Player;
 import com.mk.model.Bot;
 import com.mk.utils.PasswordHasher;
@@ -20,6 +22,7 @@ public class GameController {
 
     private static Player player1 = null;
     private static Player player2 = null;
+    private static Fighter[] fighters = FighterDAO.getAllObjects().toArray(new Fighter[0]);
 
     public static void main(String[] args) {
 
@@ -29,14 +32,19 @@ public class GameController {
 
         AuthViewController authViewController = new AuthViewController();
 
-        while(true){
-            if(!authViewController.isIsUserLogged()){
-                continue;
-            }else{
-                player1 = authViewController.getLoggedPlayerInstance();
-                break;
+        while (!authViewController.isIsUserLogged()) {
+            try {
+                Thread.sleep(100); // esperar 100 ms
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        } // Here the user is already logged in and authView is disposed after 1 second
+        }
+
+        // Ya logueado
+        player1 = authViewController.getLoggedPlayerInstance();
+        assert(player1 != null);
+
+
 
         boolean vsCpu = vsCPU();
         authViewController = null;
@@ -48,21 +56,28 @@ public class GameController {
         }
 
 
+
     }
 
     private static boolean vsCPU(){
         String[] options = {"CPU", "PLAYER VS PLAYER"};
+        int selected = -1;
 
-        int selected = JOptionPane.showOptionDialog(
-                null,
-                "Desea jugar vs cpu o otro jugador?",
-                "Seleccion de modo de juego",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[0]
-        );
+        while(selected == -1){
+            selected = JOptionPane.showOptionDialog(
+                    null,
+                    "Desea jugar vs cpu o otro jugador?",
+                    "Seleccion de modo de juego",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[0]
+            );
+            if(selected == -1){
+                JOptionPane.showMessageDialog(null, "Debes elegir una opcion", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
 
         return selected == 0;
     }
@@ -95,6 +110,7 @@ public class GameController {
     public void startGame(){
 
     }
+
 
 
 }

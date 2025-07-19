@@ -38,10 +38,11 @@ public class AuthViewController {
             // If credentials are correct login and close window else show error
             if(PlayerDAO.isPasswordCorrect(USERNAME, PASSWORD)){
                 view.showMessage("Inicio de sesion exitoso. Espere..");
-                IS_USER_LOGGED = true;
                 view.clearFields();
                 loggedPlayerInstance = PlayerDAO.getPlayerInstance(USERNAME);
-                new Timer(3000, event -> {
+                view.showSuccessLoginDialog();
+                IS_USER_LOGGED = true;
+                new Timer(300, event -> {
                     ((Timer) event.getSource()).stop();
 
                     closeWindow();
