@@ -18,6 +18,8 @@ public class FighterSelectionController{
         this.view = new FighterSelectionView(fighters);
         this.plr = player;
         initListeners();
+        view.setModal(true);
+        view.setVisible(true);
     }
 
 
@@ -32,12 +34,7 @@ public class FighterSelectionController{
 
         view.getConfirmButton().addActionListener(e ->{
             plr.setSelectedFighter(view.getCurrentFighter());
-            JOptionPane.showMessageDialog(null, "¡Personaje seleccionado!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            new Timer(1000, evt ->{
-                ((Timer) evt.getSource()).stop();
-
-                closeWindow();
-            }).start();
+            closeWindow();
 
         });
     }

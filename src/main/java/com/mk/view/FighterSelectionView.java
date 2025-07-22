@@ -1,11 +1,13 @@
 package com.mk.view;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
+
 import com.mk.model.Fighter;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class FighterSelectionView extends JFrame {
+public class FighterSelectionView extends JDialog {
     private Fighter[] fighters;
     private ArrayList<ImageIcon> images;
     private int currentIndex = 0;
@@ -24,8 +26,8 @@ public class FighterSelectionView extends JFrame {
         this.currentFighter = fighters[0];
 
         setTitle("Selección de personaje");
-        setSize(500, 450);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(550, 500);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
         setLayout(new BorderLayout(10, 10));
@@ -38,36 +40,56 @@ public class FighterSelectionView extends JFrame {
     }
 
     private void render() {
-        // Panel superior con imagen y botones de navegación
+        getContentPane().setBackground(new Color(30, 30, 30));
+
         imageLabel = new JLabel();
         imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         leftButton = new JButton("◄");
         rightButton = new JButton("►");
 
+        for (JButton b : new JButton[]{leftButton, rightButton}) {
+            b.setFocusPainted(false);
+            b.setBackground(new Color(50, 50, 50));
+            b.setForeground(Color.WHITE);
+        }
+
         JPanel selectionPanel = new JPanel(new BorderLayout());
+        selectionPanel.setOpaque(false);
         selectionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         selectionPanel.add(leftButton, BorderLayout.WEST);
         selectionPanel.add(imageLabel, BorderLayout.CENTER);
         selectionPanel.add(rightButton, BorderLayout.EAST);
 
-        // Panel central con descripcion
         description = new JTextArea(3, 30);
         description.setEditable(false);
         description.setLineWrap(true);
         description.setWrapStyleWord(true);
         description.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        description.setBorder(BorderFactory.createTitledBorder("Detalles del personaje"));
+        description.setForeground(Color.WHITE);
+        description.setBackground(new Color(45, 45, 45));
+        description.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.WHITE), "Detalles del personaje"));
 
         JScrollPane scrollPane = new JScrollPane(description);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        scrollPane.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.GRAY),
+                "Detalles del personaje",
+                TitledBorder.LEFT,
+                TitledBorder.TOP,
+                new Font("Segoe UI", Font.BOLD, 13),
+                Color.LIGHT_GRAY
+        ));
 
-        // Panel inferior con boton de confirmacion
+        scrollPane.setBackground(new Color(30, 30, 30));
+
         confirmButton = new JButton("Seleccionar");
         confirmButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
         confirmButton.setFocusPainted(false);
+        confirmButton.setBackground(new Color(70, 130, 180));
+        confirmButton.setForeground(Color.WHITE);
 
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setOpaque(false);
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         buttonPanel.add(confirmButton);
 
@@ -75,6 +97,7 @@ public class FighterSelectionView extends JFrame {
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
     }
+
 
     private void loadImages() {
         for (Fighter f : fighters) {

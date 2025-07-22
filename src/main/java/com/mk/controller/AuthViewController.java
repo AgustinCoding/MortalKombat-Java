@@ -13,7 +13,7 @@ public class AuthViewController {
     private static AuthView view;
     private static String USERNAME;
     private static String PASSWORD;
-    private static volatile boolean IS_USER_LOGGED = false;
+    private volatile boolean IS_USER_LOGGED = false;
 
     private Player loggedPlayerInstance;
 
@@ -109,7 +109,7 @@ public class AuthViewController {
         return true;
     }
 
-    public boolean isIsUserLogged() {return IS_USER_LOGGED;}
+    public boolean isUserLogged() {return IS_USER_LOGGED;}
 
 
     public Player getLoggedPlayerInstance(){

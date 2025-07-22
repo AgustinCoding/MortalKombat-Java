@@ -7,6 +7,7 @@ import com.mk.model.Player;
 import com.mk.model.Bot;
 import com.mk.utils.PasswordHasher;
 import com.mk.view.*;
+import com.mk.utils.SoundPlayer;
 
 import javax.swing.*;
 import java.text.MessageFormat;
@@ -32,7 +33,7 @@ public class GameController {
 
         AuthViewController authViewController = new AuthViewController();
 
-        while (!authViewController.isIsUserLogged()) {
+        while (!authViewController.isUserLogged()) {
             try {
                 Thread.sleep(100); // esperar 100 ms
             } catch (InterruptedException e) {
@@ -44,16 +45,28 @@ public class GameController {
         player1 = authViewController.getLoggedPlayerInstance();
         assert(player1 != null);
 
-
-
         boolean vsCpu = vsCPU();
         authViewController = null;
+
+        new FighterSelectionController(player1);
+
+        while(player1.getSelectedFighter() == null){
+            try{
+                Thread.sleep(1000);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
+        }
 
         if(vsCpu){
             assignBot();
         }else {
             authenticateSecondPlayer();
         }
+
+        new CombatDetailsView(player1, player2);
+        SoundPlayer.play("fight.wav");
+
 
 
 
@@ -91,12 +104,22 @@ public class GameController {
 
     private static void authenticateSecondPlayer(){
         AuthViewController authViewController = new AuthViewController();
+        JOptionPane.showMessageDialog(null, "Juagador 2 debe iniciar sesion para continuar");
         while(true){
-            if(!authViewController.isIsUserLogged()){
+            if(!authViewController.isUserLogged()){
                 continue;
             }else{
                 player2 = authViewController.getLoggedPlayerInstance();
                 assert( !( player2.getUsername().equals( player1.getUsername() ) ) );
+                new FighterSelectionController(player2);
+                while(player2.getSelectedFighter() == null){
+                    try{
+                        Thread.sleep(1000);
+                    }catch(InterruptedException e){
+                        e.printStackTrace();
+                    }
+                }
+
                 break;
             }
         }
