@@ -2,9 +2,11 @@ package com.mk.controller;
 
 import com.mk.dao.FighterDAO;
 import com.mk.dao.InitDB;
+import com.mk.dao.PlayerDAO;
 import com.mk.model.Fighter;
 import com.mk.model.Player;
 import com.mk.model.Bot;
+import com.mk.utils.NarrationGenerator;
 import com.mk.utils.PasswordHasher;
 import com.mk.view.*;
 import com.mk.utils.SoundPlayer;
@@ -12,13 +14,6 @@ import com.mk.utils.SoundPlayer;
 import javax.swing.*;
 import java.text.MessageFormat;
 
-
-/*
- GameController maneja el flujo del programa asi que contiene el metodo main
- Flujo:
-    - El usuario selecciona
-
- */
 public class GameController {
 
     private static Player player1 = null;
@@ -27,21 +22,18 @@ public class GameController {
 
     public static void main(String[] args) {
 
-
         InitDB.initAll();
-
 
         AuthViewController authViewController = new AuthViewController();
 
         while (!authViewController.isUserLogged()) {
             try {
-                Thread.sleep(100); // esperar 100 ms
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
-        // Ya logueado
         player1 = authViewController.getLoggedPlayerInstance();
         assert(player1 != null);
 
@@ -64,12 +56,69 @@ public class GameController {
             authenticateSecondPlayer();
         }
 
-        new CombatDetailsView(player1, player2);
+        CombatDetailsView combatDetailsView = new CombatDetailsView(player1, player2);
         SoundPlayer.play("fight.wav");
 
+        try{
+            Thread.sleep(3000);
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
 
+        combatDetailsView.dispose();
 
+        CombatController combatController = new CombatController(player1, player2);
+        SoundPlayer.play("combatmusic.wav");
+        while(combatController.isInProgress()){
+            continue;
+        }
+        SoundPlayer.stop();
 
+        PlayerDAO.updatePlayer(player1);
+        if(!vsCpu){
+            PlayerDAO.updatePlayer(player2);
+        }
+
+        // Mostrar narración
+        showNarration(combatController, player1, player2);
+    }
+
+    private static void showNarration(CombatController combatController, Player player1, Player player2) {
+        // Crear la vista de narracion
+        NarrationView narrationView = new NarrationView(
+                player1.getUsername(),
+                player2.getUsername(),
+                player1.getSelectedFighter().getName(),
+                player2.getSelectedFighter().getName()
+        );
+
+        // Generar narracion en hilo separado para optimizar la request
+        new Thread(() -> {
+            try {
+                // Generar la narracion
+                String narration = NarrationGenerator.generateNarration(
+                        combatController.getEvents(),
+                        player1.getUsername(),
+                        player2.getUsername(),
+                        player1.getSelectedFighter().getName(),
+                        player2.getSelectedFighter().getName()
+                );
+
+                // Mostrar en la vista
+                narrationView.showNarration(narration);
+
+                System.out.println("Narracion generada exitosamente");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                SwingUtilities.invokeLater(() -> {
+                    JOptionPane.showMessageDialog(narrationView,
+                            "Error generando narracion: " + e.getMessage(),
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    narrationView.dispose();
+                });
+            }
+        }).start();
     }
 
     private static boolean vsCPU(){
@@ -95,16 +144,13 @@ public class GameController {
         return selected == 0;
     }
 
-
     private static void assignBot(){
         player2 = Bot.getRandomBot(player1.getExp());
-
     }
-
 
     private static void authenticateSecondPlayer(){
         AuthViewController authViewController = new AuthViewController();
-        JOptionPane.showMessageDialog(null, "Juagador 2 debe iniciar sesion para continuar");
+        JOptionPane.showMessageDialog(null, "Jugador 2 debe iniciar sesion para continuar");
         while(true){
             if(!authViewController.isUserLogged()){
                 continue;
@@ -119,21 +165,15 @@ public class GameController {
                         e.printStackTrace();
                     }
                 }
-
                 break;
             }
         }
     }
-
 
     public Player[] getPlayers(){
         return new Player[]{player1, player2};
     }
 
     public void startGame(){
-
     }
-
-
-
 }

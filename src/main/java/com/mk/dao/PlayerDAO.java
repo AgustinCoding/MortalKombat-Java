@@ -91,4 +91,18 @@ public class PlayerDAO {
     }
 
 
+    public static void updatePlayer(Player player) {
+        try (Connection conn = DBConnection.getConnection()) {
+            String sql = "UPDATE players SET exp = ? WHERE username = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, player.getExp());
+            stmt.setString(2, player.getUsername());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 }
