@@ -50,6 +50,7 @@ public class GameController {
             }
         }
 
+
         if(vsCpu){
             assignBot();
         }else {

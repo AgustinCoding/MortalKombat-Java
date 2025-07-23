@@ -44,7 +44,6 @@ public class NarrationGenerator {
 
         sb.append("**ELEMENTOS DE HUMOR A INCLUIR:**\n");
         sb.append("• Juegos de palabras con los nombres de los jugadores\n");
-        sb.append("• Referencias a comida si el nombre lo permite (como 'Milanesa')\n");
         sb.append("• Comentarios sarcásticos sobre fallos consecutivos\n");
         sb.append("• Analogías divertidas con situaciones cotidianas\n");
         sb.append("• Reacciones exageradas a momentos anticlimáticos\n\n");
@@ -68,6 +67,7 @@ public class NarrationGenerator {
         sb.append("de espectadores sedientos de sangre y entretenimiento. ");
         sb.append("No uses emojis ni caracteres especiales fuera del sistema UTF-8");
         sb.append("Genera una narracion breve pero emocionante, limitate a unos 2000 caracteres");
+        sb.append("Al final de la narracion, segun lo que haya ocurrido, genera una reflexion de vida.");
         sb.append("¡HAZ QUE ESTA BATALLA SEA INOLVIDABLE!\n\n");
 
         sb.append("¡COMIENZA LA NARRACIÓN ÉPICA! (Y humoristica, de forma lowkey, indirecta)");

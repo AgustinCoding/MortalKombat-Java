@@ -131,7 +131,7 @@ public class Combat {
     public Player getWinnerPlayer() {
         if (hp2 <= 0 && hp1 > 0) return p1;
         if (hp1 <= 0 && hp2 > 0) return p2;
-        return null;  // empate
+        return null;  // empate, aunque imposible
     }
 
 
