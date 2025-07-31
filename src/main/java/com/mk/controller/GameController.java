@@ -1,5 +1,6 @@
 package com.mk.controller;
 
+import com.mk.dao.EventDAO;
 import com.mk.dao.FighterDAO;
 import com.mk.dao.InitDB;
 import com.mk.dao.PlayerDAO;
@@ -79,8 +80,10 @@ public class GameController {
         if(!vsCpu){
             PlayerDAO.updatePlayer(player2);
         }
+        EventDAO.addEvent(combatController.getCombat());
+        
 
-        // Mostrar narración
+        // Mostrar narracion
         showNarration(combatController, player1, player2);
     }
 

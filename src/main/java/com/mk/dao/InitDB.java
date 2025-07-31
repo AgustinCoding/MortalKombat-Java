@@ -11,6 +11,7 @@ public class InitDB {
             assert(conn != null);
             InitPlayerDB.init(conn);
             InitFightersDB.init(conn);
+            InitEventsDB.init(conn);
 
         }catch(SQLException e){
             e.printStackTrace();

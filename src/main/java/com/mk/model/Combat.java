@@ -1,5 +1,6 @@
 package com.mk.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -27,6 +28,7 @@ public class Combat {
     private int hp2 = 100;
     private final ArrayList<CombatEvent> events = new ArrayList<>();
     private final Random random = new Random();
+    private final LocalDateTime datetime;
 
     // Coeficientes
     private static final double ALPHA = 0.25;
@@ -35,10 +37,11 @@ public class Combat {
     public Combat(Player p1, Player p2) {
         this.p1 = p1;
         this.p2 = p2;
+        this.datetime = LocalDateTime.now();
         log("¡COMBATE INICIADO: " + p1.getUsername() + " vs " + p2.getUsername() + "!");
     }
 
-    /** Ejecuta todo el combate hasta que uno llegue a 0 HP */
+    // Ejecuta el combate hasta que uno llegue a 0 HP
     public void execute() {
         boolean turnoP1 = true;
         while (hp1 > 0 && hp2 > 0) {
@@ -80,7 +83,7 @@ public class Combat {
         // Decidir acción
         int roll = random.nextInt(100);
         if (roll < 20) {
-            log(atk.getUsername() + " falló el ataque.");
+            log(atk.getUsername() + " falló el ataque. (-0 HP)");
         }
         else if (roll < 30) {
             log(atk.getUsername()
@@ -134,5 +137,14 @@ public class Combat {
         return null;  // empate, aunque imposible
     }
 
+    public Player getLoserPlayer(){
+        if (hp1 <= 0 && hp2 > 0) return p1;
+        if (hp2 <= 0 && hp1 > 0) return p2;
+        return null;  // empate, aunque imposible
+    }
+
+    public LocalDateTime getDatetime(){
+        return this.datetime;
+    }
 
 }

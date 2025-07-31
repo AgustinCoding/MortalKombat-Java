@@ -6,19 +6,20 @@ import java.sql.Statement;
 
 public class InitEventsDB {
 
-    public void init(Connection conn) throws SQLException {
+    public static void init(Connection conn) throws SQLException {
         String sql = """
-                CREATE TABLE IF NOT EXSISTS events(
-                id INTEGEER PRIMARY KEY AUTOINCREMENT,
+                CREATE TABLE IF NOT EXISTS events(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 winner TEXT NOT NULL,
                 loser TEXT NOT NULL,
-                date DATETIME NOT NULL
+                date TEXT NOT NULL 
                 )
-                """;
+                """; // Se envia la fecha en formato string
 
 
-        Statement stmt = conn.prepareStatement(sql);
+        Statement stmt = conn.createStatement();
 
+        stmt.execute(sql);
     }
 
 }

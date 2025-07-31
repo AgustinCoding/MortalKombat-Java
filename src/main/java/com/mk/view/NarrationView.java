@@ -33,13 +33,14 @@ public class NarrationView extends JFrame {
         loadingPanel = new JPanel(new BorderLayout());
         JPanel centerPanel = new JPanel(new GridBagLayout());
 
-        loadingLabel = new JLabel("Generando narracion con magia negra y macumba..");
+        loadingLabel = new JLabel("Analizando combate y generando narracion..");
         loadingLabel.setFont(new Font("Arial", Font.BOLD, 18));
         loadingLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         JLabel detailsLabel = new JLabel(player1Name + " (" + fighter1 + ") vs " + player2Name + " (" + fighter2 + ")");
         detailsLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         detailsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
 
         loadingBar = new JProgressBar();
         loadingBar.setIndeterminate(true);
@@ -115,7 +116,7 @@ public class NarrationView extends JFrame {
         loadingBar.setBackground(darkBlue);
         loadingBar.setForeground(gold);
 
-        // Panel de narración
+        // Panel de narracion
         narrationPanel.setBackground(lightGray);
 
         JLabel titleLabel = (JLabel) narrationPanel.getComponent(0);
@@ -125,14 +126,15 @@ public class NarrationView extends JFrame {
         narrationTextArea.setForeground(Color.BLACK);
         narrationTextArea.setBorder(BorderFactory.createLoweredBevelBorder());
 
+        detailsLabel.setForeground(darkRed);
 
-        // Botón
+        // Boton cerrar
         closeButton.setBackground(darkRed);
         closeButton.setForeground(Color.WHITE);
         closeButton.setBorderPainted(false);
         closeButton.setFocusPainted(false);
 
-        // Hover effect simple
+        // Hover effect
         closeButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 closeButton.setBackground(new Color(180, 0, 0));

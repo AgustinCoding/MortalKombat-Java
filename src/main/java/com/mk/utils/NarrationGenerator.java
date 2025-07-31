@@ -67,7 +67,6 @@ public class NarrationGenerator {
         sb.append("de espectadores sedientos de sangre y entretenimiento. ");
         sb.append("No uses emojis ni caracteres especiales fuera del sistema UTF-8");
         sb.append("Genera una narracion breve pero emocionante, limitate a unos 2000 caracteres");
-        sb.append("Al final de la narracion, segun lo que haya ocurrido, genera una reflexion de vida.");
         sb.append("¡HAZ QUE ESTA BATALLA SEA INOLVIDABLE!\n\n");
 
         sb.append("¡COMIENZA LA NARRACIÓN ÉPICA! (Y humoristica, de forma lowkey, indirecta)");

@@ -159,7 +159,7 @@ public class EndCombatView {
         fatality.setSize(winnerFrame.getWidth(), 100);
         fatality.setLocation(0, winnerFrame.getHeight() / 3);
 
-        // Blinking
+        // ANimacion parpadeo en label
         Timer blinkTimer = new Timer(500, e -> {
             if (fatality.getForeground().equals(Color.RED)) {
                 fatality.setForeground(new Color(255, 215, 0)); // dorado
@@ -174,12 +174,11 @@ public class EndCombatView {
         lp.add(fatality, JLayeredPane.POPUP_LAYER);
         winnerFrame.repaint();
 
-        // Tras 3 segundos: parar blink, mostrar diálogo, quitar label y cerrar ventana
         Timer endTimer = new Timer(3000, e -> {
             blinkTimer.stop();                // deja de parpadear
-            ((Timer)e.getSource()).stop();    // detiene este timer
+            ((Timer)e.getSource()).stop();    // Detiene el timer (3 segundos)
 
-            // 1) diálogo informativo
+            // 1) dialogo informativo
             JOptionPane.showMessageDialog(
                     winnerFrame,
                     "¡El combate fue épico!\nPero aun no es todo..",

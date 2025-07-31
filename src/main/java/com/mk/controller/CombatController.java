@@ -5,6 +5,7 @@ import com.mk.model.Combat.CombatEvent;
 import com.mk.model.Player;
 import com.mk.view.CombatLogView;
 import com.mk.view.EndCombatView;
+import com.mk.utils.SoundPlayer;
 import com.mk.utils.NarrationGenerator;
 
 import javax.swing.*;
@@ -25,7 +26,7 @@ public class CombatController {
         startCombat();
     }
 
-    /** Inicia la simulacion en background */
+    // Inicia la simulacion en background
     private void startCombat() {
         inProgress = true;
         new SwingWorker<Void, CombatEvent>() {
@@ -59,12 +60,15 @@ public class CombatController {
         }.execute();
     }
 
-    /** Permite saber si aún quedan eventos por procesar */
     public boolean isInProgress() {
         return inProgress;
     }
 
     public ArrayList<CombatEvent> getEvents(){
         return this.combat.getEvents();
+    }
+
+    public Combat getCombat(){
+        return this.combat;
     }
 }

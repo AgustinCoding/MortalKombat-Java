@@ -25,7 +25,7 @@ public class CombatLogView extends JFrame {
         successStyle = logPane.addStyle("SuccessStyle", null);
         StyleConstants.setForeground(successStyle, new Color(0, 128, 0));
 
-        // Estilo para ataques fallidos o sin daño (rojo)
+        // Estilo para ataques fallidos(rojo)
         failureStyle = logPane.addStyle("FailureStyle", null);
         StyleConstants.setForeground(failureStyle, Color.RED);
 
@@ -40,12 +40,7 @@ public class CombatLogView extends JFrame {
         setVisible(true);
     }
 
-    /**
-     * Añade un evento al log:
-     * - Verde si hay daño real (>0 HP): patrón "-<número> HP".
-     * - Rojo si es ataque sin daño o fallo ("0 HP" o palabras clave como "falló" o "esquivó").
-     * - Gris oscuro para mensajes informativos (inicio/fin/XP).
-     */
+
     public void appendEvent(String event) {
         SwingUtilities.invokeLater(() -> {
             Style style;
@@ -53,10 +48,8 @@ public class CombatLogView extends JFrame {
             if (normalized.matches(".*-\\d+ HP.*") && !normalized.matches(".*-0 HP.*")) {
                 style = successStyle;
             } else if (normalized.matches(".*(HP).*")) {
-                // incluye HP pero es 0 daño
                 style = failureStyle;
             } else {
-                // mensajes sin HP: inicio, fin, XP, críticas aisladas
                 style = infoStyle;
             }
             try {
