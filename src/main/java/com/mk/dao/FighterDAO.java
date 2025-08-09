@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class FighterDAO {
     // CLASE CON METODOS ESTATICOS
     // getByName
-    // getByID
+    // getByIDort com.mk.utils.TxtReader;
     // getAllString -> ArrayList<String>
     // getAllObjects -> ArrayList<Fighter>
     // setNewFighter -> void, params:

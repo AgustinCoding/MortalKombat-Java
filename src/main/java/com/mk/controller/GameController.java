@@ -8,87 +8,82 @@ import com.mk.model.Fighter;
 import com.mk.model.Player;
 import com.mk.model.Bot;
 import com.mk.utils.NarrationGenerator;
-import com.mk.utils.PasswordHasher;
 import com.mk.view.*;
 import com.mk.utils.SoundPlayer;
 
 import javax.swing.*;
-import java.text.MessageFormat;
 
+/**
+ * GameController es el punto de entrada principal de la aplicacion.
+ * Orquesta todo el flujo del juego: autenticacion, seleccion de luchadores,
+ * configuracion del modo de juego, ejecucion del combate y muestra de narracion final.
+ */
 public class GameController {
 
     private static Player player1 = null;
     private static Player player2 = null;
-    private static Fighter[] fighters = FighterDAO.getAllObjects().toArray(new Fighter[0]);
+    // Se cargan todos los luchadores disponibles desde la base de datos
+    private static Fighter[] fighters;
 
     public static void main(String[] args) {
 
+        // Inicializa base de datos, DAOs y datos iniciales
         InitDB.initAll();
 
+        // Controla el login del primer jugador
         AuthViewController authViewController = new AuthViewController();
-
+        fighters = FighterDAO.getAllObjects().toArray(new Fighter[0]);
         while (!authViewController.isUserLogged()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            try { Thread.sleep(100); } catch (InterruptedException e) { e.printStackTrace(); }
         }
-
         player1 = authViewController.getLoggedPlayerInstance();
         assert(player1 != null);
 
+        // Pregunta si se juega contra CPU o contra otro jugador
         boolean vsCpu = vsCPU();
         authViewController = null;
 
+        // Permite al jugador 1 elegir luchador
         new FighterSelectionController(player1);
-
         while(player1.getSelectedFighter() == null){
-            try{
-                Thread.sleep(1000);
-            }catch(InterruptedException e){
-                e.printStackTrace();
-            }
+            try{ Thread.sleep(1000); } catch(InterruptedException e){ e.printStackTrace(); }
         }
 
-
+        // Segun el modo de juego, asigna CPU o autentica jugador 2
         if(vsCpu){
             assignBot();
-        }else {
+        } else {
             authenticateSecondPlayer();
         }
 
+        // Muestra detalles previos al combate y reproduce sonido
         CombatDetailsView combatDetailsView = new CombatDetailsView(player1, player2);
         SoundPlayer.play("fight.wav");
-
-        try{
-            Thread.sleep(3000);
-        }catch(InterruptedException e){
-            e.printStackTrace();
-        }
-
+        try{ Thread.sleep(3000); } catch(InterruptedException e){ e.printStackTrace(); }
         combatDetailsView.dispose();
 
+        // Inicia el combate
         CombatController combatController = new CombatController(player1, player2);
         SoundPlayer.play("combatmusic.wav");
-        while(combatController.isInProgress()){
-            continue;
-        }
+        while(combatController.isInProgress()){ continue; }
         SoundPlayer.stop();
 
+        // Actualiza datos de jugadores y guarda eventos del combate
         PlayerDAO.updatePlayer(player1);
         if(!vsCpu){
             PlayerDAO.updatePlayer(player2);
         }
         EventDAO.addEvent(combatController.getCombat());
-        
 
-        // Mostrar narracion
+        // Muestra narracion final del combate
         showNarration(combatController, player1, player2);
     }
 
+    /**
+     * Genera y muestra la narracion del combate en una ventana independiente.
+     * Se ejecuta en un hilo separado para no bloquear la interfaz.
+     */
     private static void showNarration(CombatController combatController, Player player1, Player player2) {
-        // Crear la vista de narracion
         NarrationView narrationView = new NarrationView(
                 player1.getUsername(),
                 player2.getUsername(),
@@ -96,10 +91,8 @@ public class GameController {
                 player2.getSelectedFighter().getName()
         );
 
-        // Generar narracion en hilo separado para optimizar la request
         new Thread(() -> {
             try {
-                // Generar la narracion
                 String narration = NarrationGenerator.generateNarration(
                         combatController.getEvents(),
                         player1.getUsername(),
@@ -107,10 +100,7 @@ public class GameController {
                         player1.getSelectedFighter().getName(),
                         player2.getSelectedFighter().getName()
                 );
-
-                // Mostrar en la vista
                 narrationView.showNarration(narration);
-
                 System.out.println("Narracion generada exitosamente");
 
             } catch (Exception e) {
@@ -125,10 +115,13 @@ public class GameController {
         }).start();
     }
 
+    /**
+     * Pregunta al usuario si desea jugar contra CPU o contra otro jugador.
+     * Obliga a elegir una opcion para continuar.
+     */
     private static boolean vsCPU(){
         String[] options = {"CPU", "PLAYER VS PLAYER"};
         int selected = -1;
-
         while(selected == -1){
             selected = JOptionPane.showOptionDialog(
                     null,
@@ -144,14 +137,20 @@ public class GameController {
                 JOptionPane.showMessageDialog(null, "Debes elegir una opcion", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-
         return selected == 0;
     }
 
+    /**
+     * Asigna un bot aleatorio como oponente segun la experiencia del jugador 1.
+     */
     private static void assignBot(){
         player2 = Bot.getRandomBot(player1.getExp());
     }
 
+    /**
+     * Autentica al segundo jugador y permite que seleccione su luchador.
+     * Garantiza que no sea el mismo usuario que el jugador 1.
+     */
     private static void authenticateSecondPlayer(){
         AuthViewController authViewController = new AuthViewController();
         JOptionPane.showMessageDialog(null, "Jugador 2 debe iniciar sesion para continuar");
@@ -163,11 +162,7 @@ public class GameController {
                 assert( !( player2.getUsername().equals( player1.getUsername() ) ) );
                 new FighterSelectionController(player2);
                 while(player2.getSelectedFighter() == null){
-                    try{
-                        Thread.sleep(1000);
-                    }catch(InterruptedException e){
-                        e.printStackTrace();
-                    }
+                    try{ Thread.sleep(1000); } catch(InterruptedException e){ e.printStackTrace(); }
                 }
                 break;
             }
@@ -178,6 +173,4 @@ public class GameController {
         return new Player[]{player1, player2};
     }
 
-    public void startGame(){
-    }
 }

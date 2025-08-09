@@ -1,0 +1,56 @@
+flowchart TD
+    A[Inicio de Aplicación] --> B[InitDB.initAll - Inicializar BD y DAOs]
+    B --> C[AuthViewController - Login Jugador 1]
+    C --> D{Usuario logueado?}
+    D -->|No| E[Thread.sleep 100ms]
+    E --> D
+    D -->|Sí| F[player1 = Usuario logueado]
+    
+    F --> G[vsCPU - Seleccionar modo de juego]
+    G --> H{Modo de juego?}
+    H -->|CPU| I[assignBot - Bot aleatorio según experiencia]
+    H -->|Player vs Player| J[authenticateSecondPlayer]
+    
+    J --> K[Login Jugador 2]
+    K --> L{Player2 logueado?}
+    L -->|No| M[Thread.sleep 1000ms]
+    M --> L
+    L -->|Sí| N[player2 = Usuario logueado]
+    N --> O[FighterSelectionController - Jugador 2 elige luchador]
+    O --> P{Fighter Player2 seleccionado?}
+    P -->|No| Q[Thread.sleep 1000ms]
+    Q --> P
+    P -->|Sí| R[FighterSelectionController - Jugador 1 elige luchador]
+    
+    I --> R
+    R --> S{Fighter Player1 seleccionado?}
+    S -->|No| T[Thread.sleep 1000ms]
+    T --> S
+    S -->|Sí| U[CombatDetailsView - Mostrar detalles pre-combate]
+    
+    U --> V[SoundPlayer.play fight.wav]
+    V --> W[Thread.sleep 3000ms]
+    W --> X[Cerrar CombatDetailsView]
+    
+    X --> Y[CombatController - Iniciar combate]
+    Y --> Z[SoundPlayer.play combatmusic.wav]
+    Z --> AA{Combate en progreso?}
+    AA -->|Sí| BB[Continuar combate]
+    BB --> AA
+    AA -->|No| CC[SoundPlayer.stop]
+    
+    CC --> DD[PlayerDAO.updatePlayer - Actualizar player1]
+    DD --> EE{Modo vsCpu?}
+    EE -->|No| FF[PlayerDAO.updatePlayer - Actualizar player2]
+    EE -->|Sí| GG[EventDAO.addEvent - Guardar evento de combate]
+    FF --> GG
+    
+    GG --> HH[showNarration - Generar narración]
+    HH --> II[NarrationView - Crear vista de narración]
+    II --> JJ[Crear nuevo hilo para narración]
+    JJ --> KK[NarrationGenerator.generateNarration]
+    KK --> LL{Generación exitosa?}
+    LL -->|Sí| MM[Mostrar narración en vista]
+    LL -->|No| NN[Mostrar error y cerrar vista]
+    MM --> OO[Fin del Juego]
+    NN --> OO
